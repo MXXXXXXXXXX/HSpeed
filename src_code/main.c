@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
     // 读取配置文件
     read_conf(conf_file, &conf);
 
-    // 处理SIGPIPE
+    // 处理SIGPIPE，以免在对已经关闭的socket写时接受到内核的程序终止信号
     handle_for_sigpipe();
 
     // 初始化套接字开始监听
