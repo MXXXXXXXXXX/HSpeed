@@ -38,12 +38,12 @@ By default the server accepts connections on port 3000, if you want to assign ot
 - 版本1.0已经完成，本地已调试通过。
 - 特性：
 
-- [x] 基于事件驱动模型的多线程非阻塞I/O
-- [x] 添加定时器，定时回调handler函数处理超时请求
-- [x] 利用epoll边缘触发模式实现HTTP持久连接(HTTP Keep-Alive)
-- [x] 多线程借助线程池实现
-- [x] 使用状态机解析HTTP协议
-- [x] HTTP GET 方法
+  - [x] 基于事件驱动模型的多线程非阻塞I/O
+  - [x] 添加定时器，定时回调handler函数处理超时请求
+  - [x] 利用epoll边缘触发模式实现HTTP持久连接(HTTP Keep-Alive)
+  - [x] 多线程借助线程池实现
+  - [x] 使用状态机解析HTTP协议
+  - [x] HTTP GET 方法
 
 
 ## TODO
