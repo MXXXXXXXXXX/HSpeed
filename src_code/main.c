@@ -40,13 +40,14 @@ int main(int argc, char *argv[]){
 
     while(1){
         // 得到最近且未删除时间和当前时间差值（等待时间）
+	// 此处用来处理tk_del_timer函数标记的超时节点
         int time = hs_find_timer();
 
         // 调用epoll_wait函数，返回接收到事件的数量
         int events_num = hs_epoll_wait(epoll_fd, events, MAXEVENTS, -1);
 
         // 处理已经超时的请求
-		hs_handle_expire_timers();
+	hs_handle_expire_timers();
 
         // 遍历events数组，根据监听种类及描述符类型分发操作
 		hs_handle_events(epoll_fd, listen_fd, events, events_num, conf.root, tp);
