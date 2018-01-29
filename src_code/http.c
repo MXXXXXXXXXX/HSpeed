@@ -75,7 +75,7 @@ void do_error(int fd, char *cause, char *err_num, char *short_msg, char *long_ms
     char body[MAXLINE];
 
     // 用log_msg和cause字符串填充错误响应体
-    //sprintf(body, "<!DOCTYPE html>");
+
     sprintf(body, "<html><title>HSpeed Error</title>");
     sprintf(body, "%s<body bgcolor=""ffffff"">\n", body);
     sprintf(body, "%s%s : %s\n", body, err_num, short_msg);
