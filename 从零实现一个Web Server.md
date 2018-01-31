@@ -12,7 +12,7 @@
 
 　　- 非阻塞I/O使用fcntl函数实现。
   
-　　```C++
+    ```C++
 　　int fcntl(int fd, int cmd);
 　　int fcntl(int fd, int cmd, long arg);
 　　int fcntl(int fd, int cmd, struct flock *lock);
