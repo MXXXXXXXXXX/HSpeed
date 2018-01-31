@@ -8,9 +8,10 @@
 
 ## 多线程 + Non-Blocking
 
-    - 多线程实现采用线程池模型，即固定线程的数量。
+　　- 多线程实现采用线程池模型，即固定线程的数量。
 
 　　- 非阻塞I/O使用fcntl函数实现。
+  
 　　```C++
 　　int fcntl(int fd, int cmd);
 　　int fcntl(int fd, int cmd, long arg);
@@ -19,42 +20,40 @@
 
 ## HTTP Keep-Alive
 
-　　-  HSpeed 支持 HTTP 长连接（Persistent Connections），即多个请求可以复用同一个 TCP 连接，以此减少由 TCP 建立/断开连接所带来的性能开销。
+　　- HSpeed 支持 HTTP 长连接（Persistent Connections），即多个请求可以复用同一个 TCP 连接，以此减少由 TCP 建立/断开连接所带来的性能开销。
 　　- 每到来一个请求，HSpeed 会对请求进行解析，判断请求头中是否存在 Connection: keep-alive 请求头。
 　　- 如果存在，在处理完一个请求后会保持连接，并对数据缓冲区（用于保存请求内容，响应内容）及状态标记和定时器进行重置，否则，关闭连接。
 
 
 ## 定时器 Timer
 
-    - HSpeed 定时器的实现参考了 Nginx 的设计，Nginx 使用一颗红黑树来存储各个定时事件，每次事件循环时从红黑树中不断找出最小（早）的事件，如果超时则触发超时处理。
+　　- HSpeed 定时器的实现参考了 Nginx 的设计，Nginx 使用一颗红黑树来存储各个定时事件，每次事件循环时从红黑树中不断找出最小（早）的事件，如果超时则触发超时处理。
 
-    - 为了简化使用优先队列结构（小根堆实现），堆头为到期时间最小的节点。
+　　- 为了简化使用优先队列结构（小根堆实现），堆头为到期时间最小的节点。
 
-    - 新任务添加时设置超时时间（expire = add_time + timeout）。
+　　- 新任务添加时设置超时时间（expire = add_time + timeout）。
 
-    - 每次大循环先通过find_time函数得到最早超时请求的剩余时间（timer = expire - find_time）。 
+　　- 每次大循环先通过find_time函数得到最早超时请求的剩余时间（timer = expire - find_time）。  
 
-    - 定时器相关代码见 [timer.h](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/timer.h) 和 [timer.c](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/timer.c)。
+　　- 定时器相关代码见 [timer.h](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/timer.h) 和 [timer.c](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/timer.c)。
 
 ## HTTP Parser
 
-    - 由于网络的不确定性，我们并不能保证一次就能读取所有的请求数据。因此，对于每一个请求，我们都会开辟一段缓冲区用于保存已经读取到的数据。
+　　- 由于网络的不确定性，我们并不能保证一次就能读取所有的请求数据。因此，对于每一个请求，我们都会开辟一段缓冲区用于保存已经读取到的数据。
 
-    - 实现一个 HTTP 状态机（Parser）来维持当前的解析状态
+　　- 实现一个 HTTP 状态机（Parser）来维持当前的解析状态。
 
-    - 相关代码见 [http_parse.h](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/http_parse.h) 和 [http_parse.c](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/ http_parse.c)。
-
-
+　　- 相关代码见 [http_parse.h](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/http_parse.h) 和 [http_parse.c](https://github.com/MXXXXXXXXXX/HSpeed/blob/master/src_code/ http_parse.c)。
 
 ## 线程池
 
-    - 使用互斥锁保证对线程池的互斥访问，使用条件变量实现同步。
+　　- 使用互斥锁保证对线程池的互斥访问，使用条件变量实现同步。
 
-    - 初始化线程池，创建worker线程。
+　　- 初始化线程池，创建worker线程。
 
-    - 各worker最外层为while循环，获得互斥锁的线程可以进入线程池，若无task队列为空则 pthread_cond_wait自动解锁互斥量，置该线程为等待状态并等待条件触发。若存在task则取出队列第一个任务，**之后立即开锁，之后再并执行具体操作**。这里若先执行后开锁则在task完成前整个线程池处于锁定状态，其他线程不能取任务，相当于串行操作！
+　　- 各worker最外层为while循环，获得互斥锁的线程可以进入线程池，若无task队列为空则 pthread_cond_wait自动解锁互斥量，置该线程为等待状态并等待条件触发。若存在task则取出队列第一个任务，**之后立即开锁，之后再并执行具体操作**。这里若先执行后开锁则在task完成前整个线程池处于锁定状态，其他线程不能取任务，相当于串行操作！
 
-    - 建立连接后，当客户端请求到达服务器端，创建task任务并添加到线程池task队列尾，当添加完task之后调用pthread_cond_signal唤醒因没有具体task而处于等待状态的worker线程。
+　　- 建立连接后，当客户端请求到达服务器端，创建task任务并添加到线程池task队列尾，当添加完task之后调用pthread_cond_signal唤醒因没有具体task而处于等待状态的worker线程。
 
 ## 一些小坑
 
