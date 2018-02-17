@@ -8,8 +8,8 @@
 
 void exch(hs_pq_t *hs_pq, size_t i, size_t j){
     void *tmp = hs_pq->pq[i];
-	hs_pq->pq[i] = hs_pq->pq[j];
-	hs_pq->pq[j] = tmp;
+    hs_pq->pq[i] = hs_pq->pq[j];
+    hs_pq->pq[j] = tmp;
 }
 
 void swim(hs_pq_t *hs_pq, size_t k){
