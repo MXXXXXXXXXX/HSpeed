@@ -19,7 +19,7 @@ int threadpool_free(hs_threadpool_t *pool){
     
 
     // 逐节点销毁task链表
-	hs_task_t *old;
+    hs_task_t *old;
     while(pool->head->next){
         old = pool->head->next;
         pool->head->next = pool->head->next->next;
@@ -33,8 +33,8 @@ void *threadpool_worker(void *arg){
         return NULL;
     
 
-	hs_threadpool_t *pool = (hs_threadpool_t *)arg;
-	hs_task_t *task;
+    hs_threadpool_t *pool = (hs_threadpool_t *)arg;
+    hs_task_t *task;
     while(1){
         // 对线程池上锁
         pthread_mutex_lock(&(pool->lock));
@@ -117,7 +117,7 @@ int threadpool_destory(hs_threadpool_t *pool, int graceful){
 // 初始化线程池
 hs_threadpool_t *threadpool_init(int thread_num){
     // 分配线程池
-	hs_threadpool_t* pool;
+    hs_threadpool_t* pool;
     if((pool = (hs_threadpool_t *)malloc(sizeof(hs_threadpool_t))) == NULL)
         goto err;
 
@@ -176,7 +176,7 @@ int threadpool_add(hs_threadpool_t* pool, void (*func)(void *), void *arg){
     }
 
     // 新建task并注册信息
-	hs_task_t *task = (hs_task_t *)malloc(sizeof(hs_task_t));
+    hs_task_t *task = (hs_task_t *)malloc(sizeof(hs_task_t));
     if(task == NULL)
         goto out;
     task->func = func;
