@@ -33,10 +33,10 @@ int main(int argc, char *argv[]){
     hs_epoll_add(epoll_fd, listen_fd, request, (EPOLLIN | EPOLLET));
 
     // 初始化线程池
-	hs_threadpool_t *tp = threadpool_init(conf.thread_num);
+    hs_threadpool_t *tp = threadpool_init(conf.thread_num);
 
     // 初始化计时器
-	hs_timer_init();
+    hs_timer_init();
 
     while(1){
         // 得到最近且未删除时间和当前时间差值（等待时间）
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
 	hs_handle_expire_timers();
 
         // 遍历events数组，根据监听种类及描述符类型分发操作
-		hs_handle_events(epoll_fd, listen_fd, events, events_num, conf.root, tp);
+	hs_handle_events(epoll_fd, listen_fd, events, events_num, conf.root, tp);
     }
 
     // 回收线程资源
