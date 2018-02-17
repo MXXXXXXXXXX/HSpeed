@@ -15,7 +15,7 @@ typedef struct priority_queue{
     void **pq;
     size_t nalloc;
     size_t size;
-	hs_pq_comparator_pt comp;
+    hs_pq_comparator_pt comp;
 }hs_pq_t;
 
 int hs_pq_init(hs_pq_t *hs_pq, hs_pq_comparator_pt comp, size_t size);
