@@ -58,7 +58,7 @@
 ## 一些小坑
 
 　　- 使用Epoll的边缘触发模式调用accept时必须使用while，以避免在高并发情况下，客户端连接不上。
-　  - 服务器端需设置监听套接字属性SO_REUSEADDR，以避免服务器端关闭套接字处于TIME_WAIT状态导致无法绑定端口。其他的看需求设定。
+  - 服务器端需设置监听套接字属性SO_REUSEADDR，以避免服务器端关闭套接字处于TIME_WAIT状态导致无法绑定端口。其他的看需求设定。
 　　- 文件描述符设置EPOLLONESHOT事件，从而有助于保证一个socket连接在任一时刻只被一个线程处理。注意！！监听套接字切勿注册该事件。
 　　- 处理SIGPIPE信号，以避免当客户端直接关闭套接字时，服务器向客户端write时，操作系统发送SIGPIPE。SIGPIPE信号的默认处理动作是终止进程。handle_for_sigpipe函数的目的就是把SIGPIPE信号的handler设置为SIG_IGN（忽略）而非终止服务器运行。
 　　当然，HSpeed 还有许多不足之处，以及未实现的特性。
